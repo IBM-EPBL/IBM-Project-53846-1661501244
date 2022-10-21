@@ -1,24 +1,23 @@
 from site import USER_BASE
 from flask import Flask,render_template, request,url_for,redirect,session
-from flask import request
 import ibm_db
-conn = ibm_db.connect ("DATABASE=bludb;HOSTNAME=9938aec0-8105-433e-8bf9-0fbb7e483086.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud;PORT=32459;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=brk74172;PWD=Hope@1234567890;","","")
-print(conn)
 
-print("connection successfully...")
-
-
-app = Flask(__name__)
+app=Flask(__name__)
 
 @app.route("/")
-def home():
+@app.route("/home")
+def home_page():
     if 'email' not in session:
       return redirect (url_for('login'))
     return render_template('home.html',name="home")
 
 @app.route("/about")
-def about():
-    return render_template('about.html',name="about")
+def about_page():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact_page():
+    return render_template("contact.html")
 
 @app.route("/signin")
 def signin():
@@ -82,10 +81,3 @@ def signup():
         return render_template('signup.html',error='Invalid Credentials')
      return render_template('signup.html',name="signup")
 
-@app.route('/logout')
-def logout():
-    session.pop('email', None)
-    return redirect(url_for('login'))
-
-if __name__=='__main__':
-    app.run()
